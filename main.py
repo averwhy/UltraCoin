@@ -7,16 +7,17 @@ import os.path
 # Assistance + math by Lauren C and James Z
 
 coin = False #using a boolean is easier, so: False = Tails, and True = Heads
-build = 1 # build information since this will be compiled to an exe.
+build = 4 # build information since this will be compiled to an exe.
 balance = None # Used for storing the read data from the database. Default is None. Please don't change this.
 playing = None # used to manage balancing
 dice_random = 0
 dice_random_2 = 0
 
+print("UltraCoin Build",build)
 #########################################################################################################
 # THE FOLLOWING CODE CHECKS FOR YOUR SAVE FILE. IF YOU REMOVE/EDIT/MOVE ANY OF IT, THE GAME WILL FAIL!
 if os.path.isfile('playerdata.db'):
-    print("================\nSave file located.\n================\n")
+    print("==============SUCCESS==============\nSave file located.\n==============SUCCESS==============\n")
     db_exists = True
     conn = sqlite3.connect('playerdata.db')
     c = conn.cursor()
@@ -40,10 +41,11 @@ def heads():
     global dice_random_2
     dice_random = 0
     dice_random_2 = 0
-    print("Since you got heads, you can 1 dice.")
+    print("\nSince you got heads, you can 1 dice.")
     input("Press ENTER to roll dice.")
     dice_random = random.randint(1,6)
     print("Your dice rolled a",dice_random)
+    time.sleep(1)
     home()
 
 def tails():
@@ -52,11 +54,12 @@ def tails():
     global dice_random_2
     dice_random = 0
     dice_random_2 = 0
-    print("Since you got heads, you can 2 die.")
+    print("\nSince you got heads, you can 2 die.")
     input("Press ENTER to roll dice.")
     dice_random = random.randint(1,6)
     dice_random_2 = random.randint(1,6)
     print("Dice 1 rolled a",dice_random,", and dice 2 rolled a",dice_random_2,".")
+    time.sleep(1)
     home()
 
 def quit_():
@@ -69,10 +72,7 @@ def play(): # This is the play process
     global playing
     conn.commit()
     playing = True
-    print("You have chosen [Play].")
-    print("")
-    print("")
-    initial_flip = input("Press ENTER to flip coin.\n")
+    initial_flip = input("\nPress ENTER to flip coin.")
     coin_random = random.randint(0,100)
     if coin_random >= 50:
         coin = False # Tails
@@ -99,7 +99,9 @@ def home():
         c.execute(sql_update_query)
         balance = balance + (dice_random + dice_random_2) #Adding to balance locally is important too
         conn.commit() # Save changes
-        print("\nAdded",(dice_random + dice_random_2), "dollars to your account.")
+        print("\n==============SUCCESS==============")
+        print("Added",(dice_random + dice_random_2), "dollars to your account.")
+        print("==============SUCCESS==============\n\n\n")
         playing = False #So they cant spoof money earnings
 
     print("Welcome UltraCoin. Please choose from the following:")
@@ -110,14 +112,18 @@ def home():
     ask1 = input(">")
 
     if ask1 == "1":
+        if balance < 7: #not enough money to play
+            print("==============ERROR==============\nYou don't have enough money for that!\n==============ERROR==============")
+            home()
+
         print("Deducted 7 dollars for cost of the game.")
         sql_update_query = "Update playerdata set money = " + str((balance - 7)) + " where money = " + str(balance)
         c.execute(sql_update_query)
         play()
 
     elif ask1 == "2":
-        print("Are you sure you want to reset your balance?")
-        print("The program will close if you proceed.")
+        print("==============WARNING==============\nAre you sure you want to reset your balance?")
+        print("The program will close if you proceed.\n==============WARNING==============")
         ask_reset = input("[Y/N] >")
         if ask_reset == "Y" or "y":
             print("Reseting your balance...")
@@ -130,7 +136,7 @@ def home():
             balance = int(re.search(r'\d+', data).group())
             conn.commit()
             print("Data reset. New balance:",balance,".")
-            time.sleep(0.5)
+            time.sleep(1.5)
             print("Now closing...")
             quit()
         if ask_reset == "N" or "n":
@@ -140,7 +146,7 @@ def home():
     elif ask1 == "3": 
         quit()
     else:
-        ("Invalid character entered.\n\n")
+        ("\nInvalid character entered.\n\n")
         home()
     
 home()
