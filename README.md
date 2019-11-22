@@ -1,2 +1,2 @@
-# UltraCoin
-Math project I am developing in Python 3.
+# UltraCoin | Executable branch
+Basically main.py but in an executable so you can play it.
