@@ -41,7 +41,7 @@ def heads():
     global dice_random_2
     dice_random = 0
     dice_random_2 = 0
-    print("\nSince you got heads, you can 1 dice.")
+    print("\nSince you got HEADS, you can 1 dice.")
     input("Press ENTER to roll dice.")
     dice_random = random.randint(1,6)
     print("Your dice rolled a",dice_random)
@@ -54,7 +54,7 @@ def tails():
     global dice_random_2
     dice_random = 0
     dice_random_2 = 0
-    print("\nSince you got heads, you can 2 die.")
+    print("\nSince you got TAILS, you can 2 die.")
     input("Press ENTER to roll dice.")
     dice_random = random.randint(1,6)
     dice_random_2 = random.randint(1,6)
